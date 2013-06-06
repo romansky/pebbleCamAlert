@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@drawable/traffic"
+    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 <TextView  
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" 
-    android:text="Welcome to Radarpusht! to start the background service click start below!"
+    android:layout_height="wrap_content"
+    android:textColor="#9000"
+    android:paddingLeft="130dp"
+    android:textSize="30dp"
+    android:text="Welcome to Radarpusht"
     />
 	<Button
+         android:layout_centerInParent="true"
 		 android:id="@+id/btn"
 	     android:layout_height="wrap_content"
 	     android:layout_width="wrap_content"
-	     android:text="@string/self_destruct"
-		 android:minHeight="92dp"
-		 android:textSize="42dp"
-	     android:onClick="startBackground" />
+	     android:text="Start
+Now"
+         android:padding="40dp"
+         android:textColor="#ffff"
+         android:background="@drawable/rounded_bg"
+		 android:textSize="42dp"/>
 </RelativeLayout>
 
