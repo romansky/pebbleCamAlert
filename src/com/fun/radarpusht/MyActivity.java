@@ -6,16 +6,24 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class MyActivity extends Activity {
 
+	public final static int LOCATION_DEBUG = 1;
+
 	private ServiceManager serviceManager;
+
+	private Queue<Location> fakeLocations;
 
     /**
      * Called when the activity is first created.
@@ -33,7 +41,7 @@ public class MyActivity extends Activity {
         });
 
 
-		List<Location> fakeLocations = new ArrayList<Location>();
+		this.fakeLocations = new ArrayDeque<Location>();
 		fakeLocations.add(createLocation(31.998634,34.823002));
 		fakeLocations.add(createLocation(31.999981,34.822294));
 		fakeLocations.add(createLocation(32.001327,34.821285));
@@ -44,6 +52,23 @@ public class MyActivity extends Activity {
 		fakeLocations.add(createLocation(32.007077,34.816843));
 		fakeLocations.add(createLocation(32.007823,34.816328));
 		fakeLocations.add(createLocation(32.00871,34.81552));
+
+		findViewById(R.id.fakeLocationKey).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i(MyActivity.class.getSimpleName(),"clicked!");
+				if (!fakeLocations.isEmpty()){
+					Location newLocation = fakeLocations.remove();
+					try {
+						Log.i(MyActivity.class.getSimpleName(),"sending service location "
+								+ newLocation.getLatitude() + " " + newLocation.getLongitude());
+						serviceManager.send(Message.obtain(null, LOCATION_DEBUG, newLocation));
+					} catch (RemoteException e) {
+						Log.i(MyActivity.class.getSimpleName(), "Exception while sending location to service",e);
+					}
+				}
+			}
+		});
 
     }
 
@@ -56,6 +81,7 @@ public class MyActivity extends Activity {
 
 
     public void startBackground() {
+		Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
 
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
@@ -64,8 +90,6 @@ public class MyActivity extends Activity {
 			}
 		});
 
-        Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), RadarService.class);
-        startService(intent);
+		this.serviceManager.start();
     }
 }

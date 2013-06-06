@@ -60,7 +60,18 @@ public class RadarService extends AbstractService {
 	@Override
 	public void onStopService() {}
 	@Override
-	public void onReceiveMessage(Message msg) {}
+	public void onReceiveMessage(Message msg) {
+
+		Log.i(RadarService.class.getSimpleName(),"service got message");
+		Log.i(RadarService.class.getSimpleName(),">>>" + ((Location)msg.obj).getLongitude() );
+
+		switch(msg.what){
+			case MyActivity.LOCATION_DEBUG:
+				Location location = (Location)msg.obj;
+				checkForCloseCameras(location);
+		}
+
+	}
 
     private void registerLocationCallbacks() {
         Log.i("radar_pusht", "registerLocationCallbacks");

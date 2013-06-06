@@ -36,6 +36,7 @@ public abstract class AbstractService extends Service {
 	private class IncomingHandler extends Handler { // Handler of incoming messages from clients.
 		@Override
 		public void handleMessage(Message msg) {
+			Log.i("MyService", "GOT MESSAGE" + msg.what);
 			switch (msg.what) {
 				case MSG_REGISTER_CLIENT:
 					Log.i("MyService", "Client registered: "+msg.replyTo);

@@ -109,8 +109,11 @@ public class ServiceManager {
 	}
 
 	public void send(Message msg) throws RemoteException {
+		Log.i("ROMAN","<<<<<<<<");
 		if (mIsBound) {
+			Log.i("ROMAN","<<<<<<<<22222");
 			if (mService != null) {
+				Log.i("ROMAN","<<<<<<<<33333");
 				mService.send(msg);
 			}
 		}

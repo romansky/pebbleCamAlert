@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Radarpusht</string>
 	<string name="self_destruct">Start!</string>
+    <string name="send_fake_location">Send fake location</string>
 </resources>

@@ -25,5 +25,16 @@ Now"
          android:textColor="#ffff"
          android:background="@drawable/rounded_bg"
 		 android:textSize="42dp"/>
+
+
+    <Button
+            android:layout_alignParentBottom="true"
+            android:id="@+id/fakeLocationKey"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/send_fake_location"
+            android:padding="10dp"
+            android:textColor="#ffff"
+            android:textSize="22dp"/>
 </RelativeLayout>
 

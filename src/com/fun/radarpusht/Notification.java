@@ -14,9 +14,9 @@ public class Notification {
 
 	public static void notifyPebble(Context context, String sender, String title,String body){
 		Notification.Builder nb = Notification.builder();
-		nb.setSender("BRAZIL ASS");
+		nb.setSender(sender);
 
-		nb.setNotificationData("zTitle" ,"zBody");
+		nb.setNotificationData(title ,body);
 		Intent intent = nb.build().createIntent();
 		context.sendBroadcast(intent);
 	}
