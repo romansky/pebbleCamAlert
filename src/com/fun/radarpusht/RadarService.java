@@ -1,13 +1,11 @@
 package com.fun.radarpusht;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -27,43 +25,42 @@ import java.util.List;
  * Date: 2/16/12
  * Time: 12:02 AM
  */
-public class RadarService extends Service {
+public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("radar_pusht", "onStartCommand");
-        //load cameras data
-        try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
-            for (Integer i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                CameraData camD = new CameraData(
-                        xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
-                        xpath.evaluate("description/text()", node),
-                        xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
-                        xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
-                );
-                cameras.add(camD);
-            }
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        //listen to location change
-        registerLocationCallbacks();
-        return START_STICKY;
-    }
+	@Override
+	public void onStartService() {
+		Log.i("radar_pusht", "onStartCommand");
+		//load cameras data
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
+			for (Integer i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				CameraData camD = new CameraData(
+						xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
+						xpath.evaluate("description/text()", node),
+						xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
+						xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
+				);
+				cameras.add(camD);
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		//listen to location change
+		registerLocationCallbacks();
+	}
 
+	@Override
+	public void onStopService() {}
+	@Override
+	public void onReceiveMessage(Message msg) {}
 
     private void registerLocationCallbacks() {
         Log.i("radar_pusht", "registerLocationCallbacks");
