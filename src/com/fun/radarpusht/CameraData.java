@@ -14,6 +14,7 @@ public class CameraData {
     public final String coordinateLon;
     public final String coordinateLat;
     private Location location;
+    private int lastDistanceMessage = 6;
 
     public CameraData(String name, String description, String coordinateLon, String coordinateLat) {
         this.name = name;
@@ -29,5 +30,13 @@ public class CameraData {
             location.setLatitude(Double.parseDouble(coordinateLat));
         }
         return location;
+    }
+
+    public int getLastDistanceMessage() {
+        return lastDistanceMessage;
+    }
+
+    public void setLastDistanceMessage(int lastDistanceMessage) {
+        this.lastDistanceMessage = lastDistanceMessage;
     }
 }
