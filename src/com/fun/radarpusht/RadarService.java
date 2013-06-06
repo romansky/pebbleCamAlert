@@ -1,8 +1,14 @@
 package com.fun.radarpusht;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -25,23 +31,16 @@ public class RadarService extends Service {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     @Override
-    public void onCreate() {
-        //code to execute when the service is first created
-    }
-
-    @Override
-    public void onDestroy() {
-        //code to execute when the service is shutting down
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("radar_pusht", "onStartCommand");
+        //load cameras data
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
@@ -60,7 +59,45 @@ public class RadarService extends Service {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
+        //listen to location change
+        registerLocationCallbacks();
         return START_STICKY;
+    }
+
+
+    private void registerLocationCallbacks() {
+        Log.i("radar_pusht", "registerLocationCallbacks");
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                checkForCloseCameras(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    private void checkForCloseCameras(Location location) {
+        Log.i("radar_pusht", "current location is " + location.getLatitude() + ", " + location.getLongitude());
+        for (int i=0;i<cameras.size();i++) {
+            CameraData cam = cameras.get(i);
+            float distance = location.distanceTo(cam.getLocation());
+            if (distance < 500) {
+                Log.i("radar_pusht", cam.name + " " + cam.description  + " distance from phone is " + distance + " meters");
+            }
+
+        }
     }
 
 
