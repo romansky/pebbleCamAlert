@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class MyActivity extends Activity {
 
-	private RadarService service;
+	private ServiceManager serviceManager;
 
     /**
      * Called when the activity is first created.
@@ -43,9 +45,6 @@ public class MyActivity extends Activity {
 		fakeLocations.add(createLocation(32.007823,34.816328));
 		fakeLocations.add(createLocation(32.00871,34.81552));
 
-
-
-
     }
 
 	private Location createLocation(Double lat, Double lon){
@@ -57,6 +56,14 @@ public class MyActivity extends Activity {
 
 
     public void startBackground() {
+
+		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+			}
+		});
+
         Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), RadarService.class);
         startService(intent);
