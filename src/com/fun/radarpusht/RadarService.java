@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -27,7 +28,7 @@ import java.util.List;
  * Date: 2/16/12
  * Time: 12:02 AM
  */
-public class RadarService extends Service {
+public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
@@ -37,7 +38,23 @@ public class RadarService extends Service {
         return null;
     }
 
-    @Override
+	@Override
+	public void onStartService() {
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public void onStopService() {
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public void onReceiveMessage(Message msg) {
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
+
+
+	@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("radar_pusht", "onStartCommand");
         //load cameras data
