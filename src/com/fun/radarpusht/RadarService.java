@@ -107,13 +107,16 @@ public class RadarService extends AbstractService {
 
     private void checkForCloseCameras(Location location) {
         Log.i("radar_pusht", "current location is " + location.getLatitude() + ", " + location.getLongitude());
-        for (int i=0;i<cameras.size();i++) {
-            CameraData cam = cameras.get(i);
+        for (CameraData cam : cameras) {
             float distance = location.distanceTo(cam.getLocation());
-            if (distance < 500) {
-                Log.i("radar_pusht", cam.name + " " + cam.description  + " distance from phone is " + distance + " meters");
+            int roundedDistance = ((int) (distance / 100));
+            if (distance < 500 && cam.getLastDistanceMessage() > roundedDistance) {
+                Notification.notifyPebble(getApplicationContext(), "RadarPusht", distance + "meters", cam.name + " " + cam.description);
+                Log.i("radar_pusht", cam.name + " " + cam.description + " distance from phone is " + distance + " meters");
+                if (roundedDistance == 0)
+                    roundedDistance = 6;
+                cam.setLastDistanceMessage(roundedDistance);
             }
-
         }
     }
 
