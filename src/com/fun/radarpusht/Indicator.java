@@ -93,7 +93,7 @@ public class Indicator {
 		// when to show the notification?
 		builder.setWhen(System.currentTimeMillis());
 		// ticker text that runs in the tray for few seconds
-		builder.setTicker("Pebble Cam Alert");
+		builder.setTicker("Pebble Cam Alert Service");
 		// set the title
 		builder.setContentTitle("Pebble Cam Alert - Servic Running");
 		// only appears when specifically collapsed / on devices which don't have notification extending

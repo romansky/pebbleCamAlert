@@ -80,8 +80,6 @@ public class MyActivity extends Activity {
 					} catch (RemoteException e) {
 						Log.i(MyActivity.class.getSimpleName(), "Exception while sending location to service",e);
 					}
-
-
 				}
 			}
 		});
