@@ -86,7 +86,6 @@ public class MyActivity extends Activity {
 			}
 		});
 
-		Indicator.showIndicator(this,"Camera coming up","Pebble Camera Alert");
     }
 
 	private Location createLocation(Double lat, Double lon){
@@ -101,11 +100,13 @@ public class MyActivity extends Activity {
 
 		if (this.serviceManager.isRunning()){
 			Toast.makeText(this, "Stopping background service..", Toast.LENGTH_SHORT).show();
+			Indicator.hideServiceIndicator(this);
 			this.serviceManager.stop();
 			((Button)findViewById(R.id.btn)).setText("Start Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
 		} else {
 			Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
+			Indicator.showServiceIndicator(this);
 			this.serviceManager.start();
 			((Button)findViewById(R.id.btn)).setText("Stop Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
