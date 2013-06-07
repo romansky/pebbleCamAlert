@@ -4,12 +4,6 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="UPDATE_PROPERTY_FILES" value="true" />
-        <notImportedProperties>
-          <property>MANIFEST_FILE_PATH</property>
-          <property>RESOURCES_DIR_PATH</property>
-          <property>ASSETS_DIR_PATH</property>
-          <property>NATIVE_LIBS_DIR_PATH</property>
-        </notImportedProperties>
       </configuration>
     </facet>
   </component>
@@ -22,6 +16,7 @@
     <orderEntry type="jdk" jdkName="Android 4.2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.2.4" level="project" />
+    <orderEntry type="library" name="v4" level="project" />
   </component>
 </module>
 

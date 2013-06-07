@@ -3,4 +3,8 @@
     <string name="app_name">Radarpusht</string>
 	<string name="self_destruct">Start!</string>
     <string name="send_fake_location">Send fake location</string>
+    <string name="start_now_text">Start
+        Now
+    </string>
+    <string name="welcome_text">Welcome to Pebble Cam Alert</string>
 </resources>

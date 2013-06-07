@@ -1,6 +1,7 @@
 package com.fun.radarpusht;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -66,10 +67,13 @@ public class MyActivity extends Activity {
 					} catch (RemoteException e) {
 						Log.i(MyActivity.class.getSimpleName(), "Exception while sending location to service",e);
 					}
+
+
 				}
 			}
 		});
 
+		Indicator.showIndicator(this,"Camera coming up","Pebble Camera Alert");
     }
 
 	private Location createLocation(Double lat, Double lon){
@@ -82,6 +86,10 @@ public class MyActivity extends Activity {
 
     public void startBackground() {
 		Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
+
+		if (!this.serviceManager.isRunning()){
+
+		}
 
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
