@@ -234,6 +234,14 @@
 		</Point>
 	</Placemark>
 	<Placemark>
+    		<name>ת"א צפון</name>
+    		<description>כביש ת"א צפון - נמיר צפון בצומת עם רוקח</description>
+    		<styleUrl>#a00</styleUrl>
+    		<Point>
+    			<coordinates>34.79346,32.09962,0</coordinates>
+    		</Point>
+    </Placemark>
+	<Placemark>
 		<name>מצלמת רמזור ומהירות</name>
 		<description>כביש 4 דרומה, צומת אמונים</description>
 		<styleUrl>#a00</styleUrl>

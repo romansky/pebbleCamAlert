@@ -129,7 +129,7 @@ public class RadarService extends AbstractService {
                 Notification.notifyPebble(getApplicationContext(), "RadarPusht", ((int) distance) + " meters", cam.description);
                 Indicator.showIndicator(this,((int) distance) + " meters","in " + ((int) distance) + " meters " + cam.description);
                 cam.setLastDistanceMessage(roundedDistance);
-//                Log.i("radar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
+//                Log.i("rwqadar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
 
             }
         }
