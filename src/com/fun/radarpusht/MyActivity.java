@@ -1,8 +1,6 @@
 package com.fun.radarpusht;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,11 +9,10 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 public class MyActivity extends Activity {
@@ -33,11 +30,27 @@ public class MyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+			}
+		});
+
+		if (this.serviceManager.isRunning()){
+			((Button)findViewById(R.id.btn)).setText("Stop Service");
+			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
+		} else {
+			((Button)findViewById(R.id.btn)).setText("Start Service");
+			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
+		}
+
         findViewById(R.id.btn).setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                startBackground();
+                startStopButtonPressed();
             }
         });
 
@@ -84,20 +97,18 @@ public class MyActivity extends Activity {
 	}
 
 
-    public void startBackground() {
-		Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
+    public void startStopButtonPressed() {
 
-		if (!this.serviceManager.isRunning()){
-
+		if (this.serviceManager.isRunning()){
+			Toast.makeText(this, "Stopping background service..", Toast.LENGTH_SHORT).show();
+			this.serviceManager.stop();
+			((Button)findViewById(R.id.btn)).setText("Start Service");
+			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
+		} else {
+			Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
+			this.serviceManager.start();
+			((Button)findViewById(R.id.btn)).setText("Stop Service");
+			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
 		}
-
-		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-			}
-		});
-
-		this.serviceManager.start();
     }
 }
