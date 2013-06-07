@@ -19,11 +19,9 @@
 		 android:id="@+id/btn"
 	     android:layout_height="wrap_content"
 	     android:layout_width="wrap_content"
-	     android:text="Start
-Now"
+	     android:text="Start Now"
          android:padding="40dp"
          android:textColor="#ffff"
-         android:background="@drawable/rounded_bg"
 		 android:textSize="42dp"/>
 
 

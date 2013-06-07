@@ -1,6 +1,7 @@
 package com.fun.radarpusht;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,6 +17,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +37,14 @@ public class RadarService extends AbstractService {
 
 	@Override
 	public void onStartService() {
+
+        InputStream fis;
+        AssetManager assetManager = getAssets();
+        try {
+            fis = assetManager.open("english_names.txt");
+            DataInputStream dataIO = new DataInputStream(fis);
+            String strLine = null;
+
 		Log.i("radar_pusht", "onStartCommand");
 		//load cameras data
 		try {
@@ -40,11 +52,16 @@ public class RadarService extends AbstractService {
 			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
+
+
+
+
 			for (Integer i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 				CameraData camD = new CameraData(
 						xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
-						xpath.evaluate("description/text()", node),
+//						xpath.evaluate("description/text()", node),
+                        dataIO.readLine(),
 						xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
 						xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
 				);
@@ -55,7 +72,17 @@ public class RadarService extends AbstractService {
 		}
 		//listen to location change
 		registerLocationCallbacks();
-	}
+
+
+
+
+            dataIO.close();
+            fis.close();
+        }
+        catch  (Exception e) {
+        }
+
+    }
 
 	@Override
 	public void onStopService() {}
@@ -82,7 +109,7 @@ public class RadarService extends AbstractService {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                checkForCloseCameras(location);
+//                checkForCloseCameras(location);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -97,16 +124,15 @@ public class RadarService extends AbstractService {
     }
 
     private void checkForCloseCameras(Location location) {
-        Log.i("radar_pusht", "current location is " + location.getLatitude() + ", " + location.getLongitude());
+        Log.i("radar_pusht", "location is " + location.getLatitude() + ", " + location.getLongitude());
         for (CameraData cam : cameras) {
-            float distance = location.distanceTo(cam.getLocation());
+            double distance = location.distanceTo(cam.getLocation());
             int roundedDistance = ((int) (distance / 100));
-            if (distance < 500 && cam.getLastDistanceMessage() > roundedDistance) {
-                Notification.notifyPebble(getApplicationContext(), "RadarPusht", distance + "meters", cam.name + " " + cam.description);
-                Log.i("radar_pusht", cam.name + " " + cam.description + " distance from phone is " + distance + " meters");
-                if (roundedDistance == 0)
-                    roundedDistance = 6;
+            if (distance <= 500 && cam.getLastDistanceMessage() > roundedDistance) {
+                Notification.notifyPebble(getApplicationContext(), "RadarPusht", ((int) distance) + " meters", cam.description);
                 cam.setLastDistanceMessage(roundedDistance);
+//                Log.i("radar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
+
             }
         }
     }
