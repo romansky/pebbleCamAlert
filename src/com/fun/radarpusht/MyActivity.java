@@ -87,9 +87,6 @@ public class MyActivity extends Activity {
     public void startBackground() {
 		Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
 
-		if (!this.serviceManager.isRunning()){
-
-		}
 
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
@@ -97,6 +94,11 @@ public class MyActivity extends Activity {
 				super.handleMessage(msg);
 			}
 		});
+
+
+        if (!this.serviceManager.isRunning()){
+
+        }
 
 		this.serviceManager.start();
     }

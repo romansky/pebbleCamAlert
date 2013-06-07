@@ -37,6 +37,7 @@ public class RadarService extends AbstractService {
 
 	@Override
 	public void onStartService() {
+        Log.i("radar_pusht", "onStartCommand");
 
         InputStream fis;
         AssetManager assetManager = getAssets();
@@ -45,16 +46,12 @@ public class RadarService extends AbstractService {
             DataInputStream dataIO = new DataInputStream(fis);
             String strLine = null;
 
-		Log.i("radar_pusht", "onStartCommand");
 		//load cameras data
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
-
-
-
 
 			for (Integer i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
@@ -130,6 +127,7 @@ public class RadarService extends AbstractService {
             int roundedDistance = ((int) (distance / 100));
             if (distance <= 500 && cam.getLastDistanceMessage() > roundedDistance) {
                 Notification.notifyPebble(getApplicationContext(), "RadarPusht", ((int) distance) + " meters", cam.description);
+                Indicator.showIndicator(this,((int) distance) + " meters","in " + ((int) distance) + " meters " + cam.description);
                 cam.setLastDistanceMessage(roundedDistance);
 //                Log.i("radar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
 
