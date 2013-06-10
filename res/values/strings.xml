@@ -4,5 +4,5 @@
 	<string name="self_destruct">Start!</string>
     <string name="send_fake_location">Send fake location</string>
     <string name="start_now_text">Start Now</string>
-    <string name="welcome_text">Pebble Cam Alert</string>
+    <string name="welcome_text">PebbleCam</string>
 </resources>

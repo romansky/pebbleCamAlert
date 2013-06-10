@@ -106,7 +106,7 @@ public class RadarService extends AbstractService {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-//                checkForCloseCameras(location);
+                checkForCloseCameras(location);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -126,8 +126,9 @@ public class RadarService extends AbstractService {
             double distance = location.distanceTo(cam.getLocation());
             int roundedDistance = ((int) (distance / 100));
             if (distance <= 500 && cam.getLastDistanceMessage() > roundedDistance) {
-                Notification.notifyPebble(getApplicationContext(), "RadarPusht", ((int) distance) + " meters", cam.description);
-                Indicator.showIndicator(this,((int) distance) + " meters","in " + ((int) distance) + " meters " + cam.description);
+                String alert = "in " + ((int) distance) + " meters " + cam.description;
+                Notification.notifyPebble(getApplicationContext(), "RadarPusht","in " + ((int) distance) + " meters", cam.description);
+                Indicator.showIndicator(this,alert,alert);
                 cam.setLastDistanceMessage(roundedDistance);
 //                Log.i("rwqadar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
 
