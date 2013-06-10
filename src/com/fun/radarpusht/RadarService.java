@@ -23,12 +23,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: romansky
- * Date: 2/16/12
- * Time: 12:02 AM
- */
+
 public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
@@ -46,30 +41,29 @@ public class RadarService extends AbstractService {
             String strLine = null;
 
 		Log.i("radar_pusht", "onStartCommand");
+		cameras = CamsCsvParser.parseFile(this);
 		//load cameras data
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
-			XPath xpath = XPathFactory.newInstance().newXPath();
-			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
-
-
-
-
-			for (Integer i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
-				CameraData camD = new CameraData(
-						xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
-//						xpath.evaluate("description/text()", node),
-                        dataIO.readLine(),
-						xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
-						xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
-				);
-				cameras.add(camD);
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
+//		try {
+//			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+//			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
+//			XPath xpath = XPathFactory.newInstance().newXPath();
+//			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
+//
+//
+//			for (Integer i = 0; i < nodes.getLength(); i++) {
+//				Node node = nodes.item(i);
+//				CameraData camD = new CameraData(
+//						xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
+////						xpath.evaluate("description/text()", node),
+//                        dataIO.readLine(),
+//						xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
+//						xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
+//				);
+//				cameras.add(camD);
+//			}
+//		} catch (Exception e) {
+//			System.out.println(e.toString());
+//		}
 		//listen to location change
 		registerLocationCallbacks();
 
@@ -79,7 +73,7 @@ public class RadarService extends AbstractService {
             dataIO.close();
             fis.close();
         }
-        catch  (Exception e) {
+        catch  (Exception ignore) {
         }
 
     }
@@ -88,9 +82,6 @@ public class RadarService extends AbstractService {
 	public void onStopService() {}
 	@Override
 	public void onReceiveMessage(Message msg) {
-
-		Log.i(RadarService.class.getSimpleName(),"service got message");
-		Log.i(RadarService.class.getSimpleName(),">>>" + ((Location)msg.obj).getLongitude() );
 
 		switch(msg.what){
 			case MyActivity.LOCATION_DEBUG:

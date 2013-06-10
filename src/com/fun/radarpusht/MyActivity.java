@@ -1,12 +1,15 @@
 package com.fun.radarpusht;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,13 +26,13 @@ public class MyActivity extends Activity {
 
 	private Queue<Location> fakeLocations;
 
-    /**
-     * Called when the activity is first created.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+	/**
+	 * Called when the activity is first created.
+	 */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
@@ -46,13 +49,13 @@ public class MyActivity extends Activity {
 			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
 		}
 
-        findViewById(R.id.btn).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.btn).setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                startStopButtonPressed();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				startStopButtonPressed();
+			}
+		});
 
 
 		this.fakeLocations = new ArrayDeque<Location>();
@@ -84,7 +87,7 @@ public class MyActivity extends Activity {
 			}
 		});
 
-    }
+	}
 
 	private Location createLocation(Double lat, Double lon){
 		Location location = new Location("data");
@@ -94,7 +97,7 @@ public class MyActivity extends Activity {
 	}
 
 
-    public void startStopButtonPressed() {
+	public void startStopButtonPressed() {
 
 		if (this.serviceManager.isRunning()){
 			Toast.makeText(this, "Stopping background service..", Toast.LENGTH_SHORT).show();
@@ -109,5 +112,28 @@ public class MyActivity extends Activity {
 			((Button)findViewById(R.id.btn)).setText("Stop Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
 		}
-    }
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// turned off for now, since were not doing real updates
+//		menu.add(getString(R.string.update_cams_text))
+//				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals(getResources().getString(R.string.update_cams_text))){
+			CamsCsvParser.parseFile(this);
+
+
+//			Intent openEditor = new Intent(this, ToDoItemEditor.class);
+//			openEditor.putExtra(ToDoItemEditor.INTENT_PARAMS.GROUP.toString(), )
+//			startActivity(openEditor);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 }
