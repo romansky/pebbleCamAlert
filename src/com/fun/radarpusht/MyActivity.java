@@ -124,6 +124,10 @@ public class MyActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add(getString(R.string.EULA))
+			.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
 		// turned off for now, since were not doing real updates
 //		menu.add(getString(R.string.update_cams_text))
 //				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);

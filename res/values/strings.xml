@@ -6,7 +6,10 @@
     <string name="update_cams_text">Update Cams</string>
     <string name="start_now_text">Start Now</string>
     <string name="welcome_text">PebbleCam</string>
-    <string name="updates">UPDATES_TMP_VALUE</string>
-    <string name="eula">EULA_TMP_VALUE</string>
+    <string name="updates"></string>
+    <string name="eula">
+        אין לראות באפליקציה זו המלצה לעבור על חוקי התנועה
+        אין התחייבות לדיוק הנתונים. השימוש באחריות המשתמש!
+    </string>
     <string name="EULA">EULA</string>
 </resources>
