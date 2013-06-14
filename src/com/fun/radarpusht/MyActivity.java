@@ -34,6 +34,8 @@ public class MyActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		new TermsScreen(this).show(false);
+
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
@@ -116,6 +118,10 @@ public class MyActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
+		menu.add(getString(R.string.EULA))
+			.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
 		// turned off for now, since were not doing real updates
 //		menu.add(getString(R.string.update_cams_text))
 //				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -132,6 +138,8 @@ public class MyActivity extends Activity {
 //			openEditor.putExtra(ToDoItemEditor.INTENT_PARAMS.GROUP.toString(), )
 //			startActivity(openEditor);
 			return true;
+		} else if (item.getTitle().equals(getResources().getString(R.string.EULA))){
+			new TermsScreen(this).show(true);
 		}
 		return super.onOptionsItemSelected(item);
 	}
