@@ -15,18 +15,8 @@
             android:textColor="#6000"
             android:textStyle="bold"
             android:textSize="36dip"
-            android:text="Welcome."
+            android:text="@string/app_name"
             android:layout_marginBottom="6dp"
-            />
-
-    <TextView
-            android:layout_marginLeft="74dp"
-            android:layout_below="@+id/welcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#6000"
-            android:textSize="22dip"
-            android:text="@string/welcome_text"
             />
 	<Button
          android:background="@drawable/rounded_bg"
