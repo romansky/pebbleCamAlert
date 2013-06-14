@@ -2,6 +2,7 @@ package com.fun.radarpusht;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayDeque;
@@ -33,6 +35,10 @@ public class MyActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(),"raleway_thin_0.ttf");
+        ((TextView) findViewById(R.id.welcome)).setTypeface(tf);
+        ((Button) findViewById(R.id.btn)).setTypeface(tf);
 
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
