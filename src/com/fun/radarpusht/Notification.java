@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.Intent;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Created: 6/6/13 3:43 PM
@@ -73,12 +74,17 @@ public class Notification {
 
 		public Builder setNotificationData(String title, String body) {
 
-			JsonObject json = new JsonObject();
-			json.addProperty("title", title);
-			json.addProperty("body", body);
+			JSONObject json = new JSONObject();
+			try {
+				json.put("title", title);
+				json.put("body", body);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 
-			JsonArray array = new JsonArray();
-			array.add(json);
+
+			JSONArray array = new JSONArray();
+			array.put(json);
 
 			notificationData = array.toString();
 			return this;

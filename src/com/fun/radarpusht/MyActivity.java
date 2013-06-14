@@ -40,6 +40,8 @@ public class MyActivity extends Activity {
         ((TextView) findViewById(R.id.welcome)).setTypeface(tf);
         ((Button) findViewById(R.id.btn)).setTypeface(tf);
 
+		new TermsScreen(this).show(false);
+
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
@@ -138,6 +140,8 @@ public class MyActivity extends Activity {
 //			openEditor.putExtra(ToDoItemEditor.INTENT_PARAMS.GROUP.toString(), )
 //			startActivity(openEditor);
 			return true;
+		} else if (item.getTitle().equals(getResources().getString(R.string.EULA))){
+			new TermsScreen(this).show(true);
 		}
 		return super.onOptionsItemSelected(item);
 	}
