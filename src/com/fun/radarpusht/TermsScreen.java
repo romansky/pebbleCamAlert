@@ -9,6 +9,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.widget.TextView;
 
 /**
  * Created: 6/14/13 11:41 PM
@@ -44,11 +47,10 @@ public class TermsScreen {
 			String title = mActivity.getString(R.string.app_name) + " v" + versionInfo.versionName;
 
 			//Includes the updates as well so users know what changed.
-			String message = mActivity.getString(R.string.updates) + "\n\n" + mActivity.getString(R.string.eula);
-
+			String message = mActivity.getString(R.string.updates) + "\n" + mActivity.getString(R.string.eula);
 			AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
 					.setTitle(title)
-					.setMessage(message)
+					.setMessage(Html.fromHtml(message))
 					.setCancelable(false)
 					.setPositiveButton(android.R.string.ok, new Dialog.OnClickListener() {
 
@@ -72,7 +74,9 @@ public class TermsScreen {
 
 					});
 			}
-			builder.create().show();
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 		}
 	}
 }

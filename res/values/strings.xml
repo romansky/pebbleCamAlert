@@ -7,9 +7,15 @@
     <string name="start_now_text">Start Now</string>
     <string name="welcome_text">PebbleCam</string>
     <string name="updates"></string>
-    <string name="eula">
-        אין לראות באפליקציה זו המלצה לעבור על חוקי התנועה
-        אין התחייבות לדיוק הנתונים. השימוש באחריות המשתמש!
-    </string>
+    <string name="eula"><Data><![CDATA[
+        <div><b>אין לראות באפליקציה זו המלצה לעבור על חוקי התנועה.</b></div>
+        <div><b>אין התחייבות לדיוק הנתונים.</b></div>
+        <div><b>השימוש באחריות המשתמש בלבד!</b></div>
+        <br/>
+        <br/>
+        <div>תודה לאתר של אבריקה ומיצו על המידע אודות המיקומים של המצלמות!</div>
+        <a href="https://sites.google.com/site/avrikaspeedtraps/">אבריקה</a> <br/>
+        <a href="http://www.mitsu.co.il/">מיצו</a>
+    ]]></Data></string>
     <string name="EULA">EULA</string>
 </resources>
