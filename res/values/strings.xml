@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Radarpusht</string>
+    <string name="app_name">PebbleCam</string>
 	<string name="self_destruct">Start!</string>
     <string name="send_fake_location">Send fake location</string>
     <string name="update_cams_text">Update Cams</string>

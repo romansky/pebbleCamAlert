@@ -118,7 +118,7 @@ public class MyActivity extends Activity {
 			Indicator.showServiceIndicator(this);
 			this.serviceManager.start();
 			((Button)findViewById(R.id.btn)).setText("Stop Service");
-			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
+//			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
 		}
 	}
 
