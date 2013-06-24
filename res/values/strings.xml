@@ -18,4 +18,5 @@
         <a href="http://www.mitsu.co.il/">מיצו</a>
     ]]></Data></string>
     <string name="EULA">EULA</string>
+    <string name="nearest_camera">Closest Camera:</string>
 </resources>

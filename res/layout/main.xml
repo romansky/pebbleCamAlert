@@ -41,6 +41,16 @@
             android:textColor="#ffff"
             android:textSize="22dp"/>
 
+    <TextView
+            android:id="@+id/nearest_camera_textview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="102dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/nearest_camera"
+            android:textColor="@android:color/white"
+            />
+
 
     <com.google.ads.AdView android:id="@+id/adView"
                            android:layout_centerHorizontal="true"

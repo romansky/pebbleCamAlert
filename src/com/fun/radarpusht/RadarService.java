@@ -18,6 +18,10 @@ public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
+	private final int ALERT_DISTANCE = 500;
+
+	private int closestCameraDistance = 0;
+
 	@Override
 	public void onStartService() {
 		Log.i(RadarService.class.getSimpleName(), "onStartService");
@@ -34,13 +38,8 @@ public class RadarService extends AbstractService {
 			}
 		}.execute();
 
-		for (CameraData camera : cameras) {
-			System.out.println(camera.description);
-		}
-
 		//listen to location change
-
-//		registerLocationCallbacks();
+		registerLocationCallbacks();
 
     }
 
@@ -52,7 +51,7 @@ public class RadarService extends AbstractService {
 		switch(msg.what){
 			case MyActivity.LOCATION_DEBUG:
 				Location location = (Location)msg.obj;
-				checkForCloseCameras(location);
+				updateMyLocation(location);
 		}
 	}
 
@@ -65,7 +64,7 @@ public class RadarService extends AbstractService {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                checkForCloseCameras(location);
+				updateMyLocation(location);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -79,21 +78,50 @@ public class RadarService extends AbstractService {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
-    private void checkForCloseCameras(Location location) {
-        Log.i("radar_pusht", "location is " + location.getLatitude() + ", " + location.getLongitude());
-        for (CameraData cam : cameras) {
-            double distance = location.distanceTo(cam.getLocation());
-            int roundedDistance = ((int) (distance / 100));
-            if (distance <= 500 && cam.getLastDistanceMessage() > roundedDistance) {
-                String alert = "in " + ((int) distance) + " meters " + cam.descriptionEn;
-                Notification.notifyPebble(getApplicationContext(), "PebbleCam","in " + ((int) distance) + " meters", cam.descriptionEn);
-                Indicator.showIndicator(this,alert,alert);
-                cam.setLastDistanceMessage(roundedDistance);
-//                Log.i("rwqadar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
+	private CameraData findClosestCamera(Location location){
+		CameraData closestCamera = null;
+		for (CameraData cam : cameras) {
+			if (closestCamera == null){
+				closestCamera = cam;
+			} else {
+				double distance = location.distanceTo(cam.getLocation());
+				double closeCamDistance = location.distanceTo(closestCamera.getLocation());
+				if (closeCamDistance > distance){
+					closestCamera = cam;
+				}
+			}
+		}
+		return closestCamera;
+	}
 
-            }
-        }
-    }
+	private void updateMyLocation(Location location){
+		CameraData closestCamera = findClosestCamera(location);
+		if (closestCamera != null){
+			updateNearestCamera(closestCamera,location);
+			int roundedDistance = roundedDistanceMeter(closestCamera, location);
+			if (roundedDistance <= ALERT_DISTANCE && closestCameraDistance > roundedDistance){
+				notifyCaneraInRange(closestCamera,location);
+			}
+			closestCameraDistance = roundedDistance;
+		}
+	}
 
+	private void notifyCaneraInRange(CameraData closestCamera,Location location) {
+		int distanceToCam = roundedDistanceMeter(closestCamera,location);
+		String messageText = closestCamera.descriptionEn + " (" + distanceToCam + "m)";
+		// notify pebble
+		Notification.notifyPebble(getApplicationContext(), "PebbleCam","in " + ((int) distanceToCam) + "m", messageText);
+		// notify phone
+		Indicator.showIndicator(this,messageText,messageText);
+	}
+
+	private void updateNearestCamera(CameraData closestCamera,Location location) {
+		String messageText = closestCamera.descriptionEn + " (" + roundedDistanceMeter(closestCamera,location) + "m)";
+		this.send( Message.obtain(null, MyActivity.NEAREST_CAMERA_CHANGE, messageText) );
+	}
+
+	private int roundedDistanceMeter(CameraData camera, Location location){
+		return (int)(location.distanceTo(camera.getLocation()));
+	}
 
 }

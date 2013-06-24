@@ -1,7 +1,6 @@
 package com.fun.radarpusht;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import java.util.Queue;
 public class MyActivity extends Activity {
 
 	public final static int LOCATION_DEBUG = 1;
+	public final static int NEAREST_CAMERA_CHANGE =2;
 
 	private ServiceManager serviceManager;
 
@@ -45,6 +45,13 @@ public class MyActivity extends Activity {
 		this.serviceManager = new ServiceManager(this, RadarService.class, new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
+
+				switch(msg.what){
+					case NEAREST_CAMERA_CHANGE:
+						String nearestCameraText = (String)msg.obj;
+						nearestCameraMessage(nearestCameraText);
+				}
+
 				super.handleMessage(msg);
 			}
 		});
@@ -96,6 +103,11 @@ public class MyActivity extends Activity {
 		});
 
 	}
+
+	private void nearestCameraMessage(String message) {
+		((TextView)findViewById(R.id.nearest_camera_textview)).setText( getResources().getString(R.string.nearest_camera) + message );
+	}
+
 
 	private Location createLocation(Double lat, Double lon){
 		Location location = new Location("data");
