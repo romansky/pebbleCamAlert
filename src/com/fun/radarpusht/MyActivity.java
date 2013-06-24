@@ -137,12 +137,6 @@ public class MyActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(getResources().getString(R.string.update_cams_text))){
-			CamsCsvParser.parseFile(this);
-
-
-//			Intent openEditor = new Intent(this, ToDoItemEditor.class);
-//			openEditor.putExtra(ToDoItemEditor.INTENT_PARAMS.GROUP.toString(), )
-//			startActivity(openEditor);
 			return true;
 		} else if (item.getTitle().equals(getResources().getString(R.string.EULA))){
 			new TermsScreen(this).show(true);

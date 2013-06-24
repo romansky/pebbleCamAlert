@@ -5,9 +5,11 @@ import android.content.res.AssetManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,54 +30,29 @@ public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
-
-
 	@Override
 	public void onStartService() {
-        Log.i("radar_pusht", "onStartCommand");
+		Log.i(RadarService.class.getSimpleName(), "onStartService");
+		new AsyncTask<Void,Void,Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				cameras = CamsKmzFileParser.parseKMZ(RadarService.this);
+				return null;
+			}
 
-        InputStream fis;
-        AssetManager assetManager = getAssets();
-        try {
-            fis = assetManager.open("english_names.txt");
-            DataInputStream dataIO = new DataInputStream(fis);
-            String strLine = null;
+			@Override
+			protected void onPostExecute(Void aVoid) {
+				Toast.makeText(RadarService.this, "Finished loading camera data", Toast.LENGTH_SHORT).show();
+			}
+		}.execute();
 
-		Log.i("radar_pusht", "onStartCommand");
-		cameras = CamsCsvParser.parseFile(this);
-		//load cameras data
-//		try {
-//			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//			Document camerasDoc = builder.parse(getAssets().open("gatso_speed_camera_01_2012.kml"));
-//			XPath xpath = XPathFactory.newInstance().newXPath();
-//			NodeList nodes = (NodeList) xpath.evaluate("//Placemark", camerasDoc, XPathConstants.NODESET);
-//
-//
-//			for (Integer i = 0; i < nodes.getLength(); i++) {
-//				Node node = nodes.item(i);
-//				CameraData camD = new CameraData(
-//						xpath.evaluate("name/text()", node, XPathConstants.STRING).toString(),
-////						xpath.evaluate("description/text()", node),
-//                        dataIO.readLine(),
-//						xpath.evaluate("Point/coordinates/text()", node).split(",")[0],
-//						xpath.evaluate("Point/coordinates/text()", node).split(",")[1]
-//				);
-//				cameras.add(camD);
-//			}
-//		} catch (Exception e) {
-//			System.out.println(e.toString());
-//		}
+		for (CameraData camera : cameras) {
+			System.out.println(camera.description);
+		}
+
 		//listen to location change
-		registerLocationCallbacks();
 
-
-
-
-            dataIO.close();
-            fis.close();
-        }
-        catch  (Exception e) {
-        }
+//		registerLocationCallbacks();
 
     }
 
@@ -89,7 +66,6 @@ public class RadarService extends AbstractService {
 				Location location = (Location)msg.obj;
 				checkForCloseCameras(location);
 		}
-
 	}
 
     private void registerLocationCallbacks() {
@@ -121,8 +97,8 @@ public class RadarService extends AbstractService {
             double distance = location.distanceTo(cam.getLocation());
             int roundedDistance = ((int) (distance / 100));
             if (distance <= 500 && cam.getLastDistanceMessage() > roundedDistance) {
-                String alert = "in " + ((int) distance) + " meters " + cam.description;
-                Notification.notifyPebble(getApplicationContext(), "RadarPusht","in " + ((int) distance) + " meters", cam.description);
+                String alert = "in " + ((int) distance) + " meters " + cam.descriptionEn;
+                Notification.notifyPebble(getApplicationContext(), "PebbleCam","in " + ((int) distance) + " meters", cam.descriptionEn);
                 Indicator.showIndicator(this,alert,alert);
                 cam.setLastDistanceMessage(roundedDistance);
 //                Log.i("rwqadar_pusht", location.getLatitude() + "_" + location.getLongitude() + " ," + cam.description + " ," + distance + " meters, " + roundedDistance);
