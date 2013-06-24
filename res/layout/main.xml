@@ -49,6 +49,9 @@
             android:layout_width="wrap_content"
             android:text="@string/nearest_camera"
             android:textColor="@android:color/white"
+            android:background="#88000000"
+            android:padding="10dp"
+            android:visibility="invisible"
             />
 
 

@@ -59,9 +59,11 @@ public class MyActivity extends Activity {
 		if (this.serviceManager.isRunning()){
 			((Button)findViewById(R.id.btn)).setText("Stop Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
+			findViewById(R.id.nearest_camera_textview).setVisibility(View.VISIBLE);
 		} else {
 			((Button)findViewById(R.id.btn)).setText("Start Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
+			findViewById(R.id.nearest_camera_textview).setVisibility(View.GONE);
 		}
 
 		findViewById(R.id.btn).setOnClickListener(new OnClickListener() {
@@ -125,11 +127,13 @@ public class MyActivity extends Activity {
 			this.serviceManager.stop();
 			((Button)findViewById(R.id.btn)).setText("Start Service");
 			findViewById(R.id.fakeLocationKey).setVisibility(View.GONE);
+			findViewById(R.id.nearest_camera_textview).setVisibility(View.GONE);
 		} else {
 			Toast.makeText(this, "Starting background service..", Toast.LENGTH_SHORT).show();
 			Indicator.showServiceIndicator(this);
 			this.serviceManager.start();
 			((Button)findViewById(R.id.btn)).setText("Stop Service");
+			findViewById(R.id.nearest_camera_textview).setVisibility(View.VISIBLE);
 //			findViewById(R.id.fakeLocationKey).setVisibility(View.VISIBLE);
 		}
 	}
