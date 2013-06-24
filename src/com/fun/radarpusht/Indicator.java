@@ -63,7 +63,7 @@ public class Indicator {
 		builder.setContentText(contentText);
 		styled.setSummaryText(contentText);
 		// the drawable icon
-		builder.setSmallIcon(R.drawable.indicator);
+		builder.setSmallIcon(R.drawable.ic_launcher);
 		// set priority (for API level 16 devices)
 		builder.setPriority(Notification.PRIORITY_MAX);
 		// add action button to a notification
@@ -100,7 +100,7 @@ public class Indicator {
 		builder.setContentText(contentText);
 		styled.setSummaryText(contentText);
 		// the drawable icon
-		builder.setSmallIcon(R.drawable.indicator);
+		builder.setSmallIcon(R.drawable.ic_launcher);
 		// set priority (for API level 16 devices)
 		builder.setPriority(Notification.PRIORITY_LOW);
 		// add action button to a notification
