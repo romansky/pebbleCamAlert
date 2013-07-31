@@ -18,9 +18,10 @@ public class RadarService extends AbstractService {
 
     private List<CameraData> cameras = new ArrayList<CameraData>();
 
-	private final int ALERT_DISTANCE = 500;
+	private final int ALERT_DISTANCE = 500;;
 
-	private int closestCameraDistance = 0;
+
+	private CloseCameraTracker closeCameraTracker = new CloseCameraTracker();
 
 	@Override
 	public void onStartService() {
@@ -99,10 +100,9 @@ public class RadarService extends AbstractService {
 		if (closestCamera != null){
 			updateNearestCamera(closestCamera,location);
 			int roundedDistance = roundedDistanceMeter(closestCamera, location);
-			if (roundedDistance <= ALERT_DISTANCE && closestCameraDistance > roundedDistance){
+			if (closeCameraTracker.setClosestCamera(closestCamera, roundedDistance) &&  roundedDistance <= ALERT_DISTANCE){
 				notifyCaneraInRange(closestCamera,location);
 			}
-			closestCameraDistance = roundedDistance;
 		}
 	}
 
@@ -122,6 +122,30 @@ public class RadarService extends AbstractService {
 
 	private int roundedDistanceMeter(CameraData camera, Location location){
 		return (int)(location.distanceTo(camera.getLocation()));
+	}
+
+	private class CloseCameraTracker {
+		private CameraData closestCamera = null;
+		private int closestCameraDistance;
+
+		/*
+		@return is camera appriaching
+		*/
+		public boolean setClosestCamera(CameraData cameraData, int distance){
+			if (closestCamera == null ||  cameraData != closestCamera){
+				this.closestCameraDistance = distance;
+				this.closestCamera = cameraData;
+				return true;
+			} else {
+				if (distance < closestCameraDistance){
+					this.closestCameraDistance = distance;
+					return true;
+				} else {
+					this.closestCameraDistance = distance;
+					return false;
+				}
+			}
+		}
 	}
 
 }
